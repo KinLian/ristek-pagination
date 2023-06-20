@@ -34,6 +34,10 @@ function HomeScreen() {
         data={quotes}
         renderItem={Card}
         keyExtractor={(item) => item._id}
+        ListHeaderComponent={
+          <Text style={styles.title}>List of Quotes !!!</Text>
+        }
+        ListFooterComponent={<LoadingFooter isLoading={isLoading} />}
         onEndReached={fetchMoreQuotes}
         onEndReachedThreshold={0.2}
       />
