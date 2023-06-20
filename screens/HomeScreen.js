@@ -7,6 +7,8 @@ import Card from "../components/Card";
 import { LoadingFooter } from "../components";
 
 function HomeScreen() {
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
   const [quotes, setQuotes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,22 +27,28 @@ function HomeScreen() {
   }
 
   useEffect(() => {
-    useGetQuotes(currentPage, 15).then((data) => setQuotes(data));
+    useGetQuotes(currentPage, 15)
+      .then((data) => setQuotes(data))
+      .then(() => setIsInitialLoading(false));
   }, []);
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={quotes}
-        renderItem={Card}
-        keyExtractor={(item) => item._id}
-        ListHeaderComponent={
-          <Text style={styles.title}>List of Quotes !!!</Text>
-        }
-        ListFooterComponent={<LoadingFooter isLoading={isLoading} />}
-        onEndReached={fetchMoreQuotes}
-        onEndReachedThreshold={0.2}
-      />
+      {isInitialLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          data={quotes}
+          renderItem={Card}
+          keyExtractor={(item) => item._id}
+          ListHeaderComponent={
+            <Text style={styles.title}>List of Quotes !!!</Text>
+          }
+          ListFooterComponent={<LoadingFooter isLoading={isLoading} />}
+          onEndReached={fetchMoreQuotes}
+          onEndReachedThreshold={0.2}
+        />
+      )}
     </View>
   );
 }
@@ -50,6 +58,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
     backgroundColor: "#fff",
   },
   title: {
