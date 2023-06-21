@@ -12,18 +12,24 @@ function HomeScreen() {
   const [quotes, setQuotes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false)
 
   function fetchMoreQuotes() {
     if (isLoading) return;
 
     setIsLoading(true);
+    setIsError(false)
 
     useGetQuotes(currentPage + 1, 15)
       .then((newQuotes) => {
         setQuotes((prevData) => [...prevData, ...newQuotes]);
         setCurrentPage(currentPage + 1);
       })
-      .then(() => setIsLoading(false));
+      .then(() => setIsLoading(false))
+      .catch(() => {
+        setIsError(true)
+        setIsLoading(false)
+      });
   }
 
   useEffect(() => {
@@ -44,8 +50,8 @@ function HomeScreen() {
           ListHeaderComponent={
             <Text style={styles.title}>List of Quotes !!!</Text>
           }
-          ListFooterComponent={<LoadingFooter isLoading={isLoading} />}
-          onEndReached={fetchMoreQuotes}
+          ListFooterComponent={<LoadingFooter isLoading={isLoading} isError={isError} />}
+          onEndReached={!isError && fetchMoreQuotes}
           onEndReachedThreshold={0.2}
         />
       )}

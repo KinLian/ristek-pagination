@@ -8,7 +8,7 @@ async function useGetQuotes(page, limit) {
     return response.data;
   } catch (error) {
     console.error(error);
-    return [];
+    return null;
   }
 }
 

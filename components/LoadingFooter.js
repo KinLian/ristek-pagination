@@ -1,8 +1,11 @@
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
 
-function LoadingFooter(isLoading) {
+function LoadingFooter({isLoading, isError}) {
   return (
-    <View style={styles.loading}>{isLoading && <ActivityIndicator />}</View>
+    <View style={styles.loading}>
+      {isLoading && <ActivityIndicator />}
+      {isError && <Text style={styles.text}>Something went wrong</Text>}
+    </View>
   );
 }
 
@@ -12,4 +15,7 @@ const styles = StyleSheet.create({
   loading: {
     paddingVertical: 16,
   },
+  text: {
+    textAlign: "center",
+  }
 });
